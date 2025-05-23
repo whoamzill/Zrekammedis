@@ -1,24 +1,32 @@
+<?php
+// Tampilkan pesan error dari URL (jika ada)
+$error = isset($_GET['error']) ? "Login gagal! Data tidak cocok." : "";
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Login RCT</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div class="login-container">
-        <h2>LOGIN</h2>
-        <form action="proses_login.php" method="post">
-            <input type="text" name="kode_user" placeholder="kode_user" required>
-            <input type="text" name="username" placeholder="username" required>
-            <input type="password" name="password" placeholder="password" required>
-            <button type="submit">LOGIN</button>
-        </form>
-        <?php
-        if (isset($_GET['error'])) {
-            echo "<p class='error'>".$_GET['error']."</p>";
-        }
-        ?>
-    </div>
+<div class="login-container">
+    <h2>Login RCT</h2>
+    <form method="POST" action="proses_login.php">
+        <label>Kode User</label>
+        <input type="text" name="kd_user" required><br>
+
+        <label>Username</label>
+        <input type="text" name="username" required><br>
+
+        <label>Password</label>
+        <input type="password" name="password" required><br>
+
+        <button type="submit">Login</button>
+        <?php if ($error): ?>
+            <p style="color: red;"><?= $error ?></p>
+        <?php endif; ?>
+    </form>
+</div>
 </body>
 </html>

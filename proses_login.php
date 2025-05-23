@@ -1,20 +1,31 @@
 <?php
-$kode_user_input = $_POST['kode_user'];
-$username_input = $_POST['username'];
-$password_input = $_POST['password'];
+session_start();
+include 'koneksi.php';
 
-// Data yang valid
-$valid_kode_user = "2323";
-$valid_username = "admin";
-$valid_password = "RCTadmin1234";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Ambil inputan
+    $kd_user = mysqli_real_escape_string($conn, $_POST['kd_user']);
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-if ($kode_user_input === $valid_kode_user && $username_input === $valid_username && $password_input === $valid_password) {
-    // Redirect ke halaman utama jika berhasil login
-    header("Location: halaman_utama.php");
-    exit();
+    // Cek di database
+    $query = "SELECT * FROM login WHERE kd_user='$kd_user' AND username='$username' AND password='$password'";
+    $result = mysqli_query($conn, $query);
+
+    // Jika ditemukan 1 user, sukses login
+    if (mysqli_num_rows($result) == 1) {
+        $_SESSION['kd_user'] = $kd_user;
+        $_SESSION['username'] = $username;
+        header("Location: index.php");
+        exit();
+    } else {
+        // Gagal login
+        header("Location: login.php?error=1");
+        exit();
+    }
 } else {
-    // Redirect kembali ke login dengan pesan error
-    $error = "Kode user, username, atau password salah!";
-    header("Location: login.php?error=" . urlencode($error));
+    // Jika akses langsung ke file
+    header("Location: login.php");
     exit();
 }
+?>
